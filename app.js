@@ -25,7 +25,6 @@ app.post("/assignments", async (req, res) => {
             "INSERT INTO assignments (title, deadline) VALUES ($1, $2) RETURNING *",
             [title, deadline]
         );
-
         res.status(201).json(result.rows[0]);
 
     } catch (error) {
@@ -33,6 +32,7 @@ app.post("/assignments", async (req, res) => {
         res.status(500).json({ message: "Something went wrong" });
     }
 });
+
 
 app.listen(3000, () => {
     console.log("Server running on port 3000");
