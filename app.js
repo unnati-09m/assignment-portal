@@ -7,14 +7,27 @@ app.use(express.json());
 
 app.get("/assignments", async (req, res) => {
     try {
-        const result = await pool.query(
-            "SELECT * FROM assignments ORDER BY id DESC"
-        );
+        const { submitted } = req.query;
+
+        let result;
+
+        if (submitted === "true") {
+            result = await pool.query(
+                "SELECT * FROM assignments WHERE submitted = true ORDER BY id DESC"
+            );
+        } else {
+            result = await pool.query(
+                "SELECT * FROM assignments ORDER BY id DESC"
+            );
+        }
 
         res.json(result.rows);
+
     } catch (error) {
         console.log(error);
-        res.status(500).json({ message: "Something went wrong" });
+        res.status(500).json({
+            message: "Something went wrong"
+        });
     }
 });
 app.post("/assignments", async (req, res) => {
